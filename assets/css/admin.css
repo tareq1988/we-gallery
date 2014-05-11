@@ -32,6 +32,9 @@
   padding: 0;
   width: 150px;
 }
+#wegal-image-wrap .thumb img:hover {
+  cursor: move;
+}
 #wegal-image-wrap .thumb a.image-delete {
   background: #AA0000;
   border-radius: 500px;
