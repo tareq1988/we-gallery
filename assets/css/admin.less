@@ -1,0 +1,69 @@
+.clearfix() {
+  &:before,
+  &:after {
+    content: " "; // 1
+    display: table; // 2
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+#wegal-submitdiv {
+    &.postbox {
+        .inside {
+            padding: 0;
+            margin: 0;
+
+            .wegal-buttons {
+                padding: 20px;
+
+                .dashicons {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+}
+
+#wegal-image-wrap {
+    .clearfix();
+    padding: 25px 10px;
+
+    .thumb {
+        float: left;
+        position: relative;
+
+        img {
+             border-radius: 2px;
+            box-shadow: 0 1px 4px 0 #A5A5A5;
+            cursor: pointer;
+            height: 150px;
+            margin: 0 20px 20px 0;
+            padding: 0;
+            width: 150px;
+        }
+
+        a.image-delete {
+            background: #AA0000;
+            border-radius: 500px;
+            color: #FFFFFF;
+            padding: 0 5px;
+            position: absolute;
+            right: 10px;
+            top: -5px;
+            display: none;
+            text-decoration: none;
+
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        &:hover {
+            .image-delete {
+                display: block;
+            }
+        }
+    }
+}
