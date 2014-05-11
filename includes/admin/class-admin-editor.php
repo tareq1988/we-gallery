@@ -76,7 +76,7 @@ class We_Gallery_Admin_Editor {
     function admin_column( $columns ) {
         $columns = array(
             'cb' => '<input type="checkbox" />',
-            'title' => __( 'Form Name', 'wegal' ),
+            'title' => __( 'Gallery Name', 'wegal' ),
             'num_image' => __( 'Images', 'wegal' ),
             'date' => __( 'Date', 'wegal' ),
         );
