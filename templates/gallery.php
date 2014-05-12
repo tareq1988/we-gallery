@@ -1,3 +1,12 @@
+<?php
+/**
+ * Gallery template file
+ *
+ * You can override this file by copying this file to your current themes directory.
+ * Simply create a folder "wegallery" and place this file.
+ */
+?>
+
 <div class="wegal-gallery-wrap">
 
     <ul class="wegallery-gallery wegallery-<?php echo $gallery_id; ?> wegal-col-<?php echo $column; ?>">
@@ -11,7 +20,5 @@
             </li>
 
         <?php } ?>
-
     </ul>
-
 </div>
