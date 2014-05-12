@@ -1,13 +1,13 @@
 <?php
-/*
-Plugin Name: weGallery
-Plugin URI: http://wedevs.com/
-Description: A simple gallery for WordPress at its best
-Version: 0.1
-Author: Tareq Hasan
-Author URI: http://tareq.wedevs.com/
-License: GPL2
-*/
+/**
+ * Plugin Name: We Gallery
+ * Plugin URI: http://wedevs.com/
+ * Description: A simple gallery for WordPress at its best
+ * Version: 0.1
+ * Author: Tareq Hasan
+ * Author URI: http://tareq.wedevs.com/
+ * License: GPL2
+ */
 
 /**
  * Copyright (c) 2014 Tareq Hasan (email: tareq@wedevs.com). All rights reserved.
@@ -39,14 +39,19 @@ License: GPL2
 if ( !defined( 'ABSPATH' ) ) exit;
 
 /**
- * We_Gallery class
+ * We_Gallery_Plugin class
  *
- * @class We_Gallery The class that holds the entire We_Gallery plugin
+ * The class that holds the entire We_Gallery_Plugin plugin
+ *
+ * @author Tareq Hasan <tareq@wedevs.com>
  */
 class We_Gallery_Plugin {
 
-    public static $post_type = 'we_gallery';
-
+    /**
+     * Gallery factory object
+     *
+     * @var \We_Gallery_Factory
+     */
     public $factory = null;
 
     /**
@@ -55,8 +60,8 @@ class We_Gallery_Plugin {
      * Sets up all the appropriate hooks and actions
      * within our plugin.
      *
-     * @uses is_admin()
      * @uses add_action()
+     * @uses add_shortcode()
      */
     public function __construct() {
 
@@ -80,9 +85,6 @@ class We_Gallery_Plugin {
     /**
      * Autoload class files on demand
      *
-     * `WPUF_Form_Posting` becomes => form-posting.php
-     * `WPUF_Dashboard` becomes => dashboard.php
-     *
      * @param string $class requested class name
      */
     function autoload( $class ) {
@@ -99,9 +101,9 @@ class We_Gallery_Plugin {
     }
 
     /**
-     * Initializes the We_Gallery() class
+     * Initializes the We_Gallery_Plugin() class
      *
-     * Checks for an existing We_Gallery() instance
+     * Checks for an existing We_Gallery_Plugin() instance
      * and if it doesn't find one, creates it.
      */
     public static function init() {
@@ -124,7 +126,6 @@ class We_Gallery_Plugin {
         define('WEGAL_DIR', dirname( __FILE__ ) );
         define('WEGAL_URI', plugins_url( '', __FILE__ ) );
         define('WEGAL_ASSET_URI', WEGAL_URI . '/assets' );
-
     }
 
     /**
@@ -135,7 +136,6 @@ class We_Gallery_Plugin {
     private function file_includes() {
 
         require_once WEGAL_DIR . '/includes/functions.php';
-
     }
 
     /**
@@ -183,6 +183,11 @@ class We_Gallery_Plugin {
         wp_enqueue_script( 'wegal-scripts', WEGAL_ASSET_URI . '/js/script.js', array( 'jquery' ), false, true );
     }
 
+    /**
+     * Register our gallery post type
+     *
+     * @return void
+     */
     function register_post_type() {
 
         $labels = array(
@@ -221,9 +226,16 @@ class We_Gallery_Plugin {
             'capability_type'     => 'page',
         );
 
-        register_post_type( self::$post_type, $args );
+        register_post_type( wegal_get_post_type(), $args );
     }
 
+    /**
+     * Shortcode handler function
+     *
+     * @param  array $atts
+     * @param  string $contents
+     * @return string
+     */
     public function shortcode( $atts, $contents = '' ) {
         $atts = shortcode_atts( array(
           'id'  => 0,
@@ -264,6 +276,6 @@ class We_Gallery_Plugin {
         return apply_filters( 'wegallery_shortcode', $content, $gallery_images, $gallery_id, $gallery );
     }
 
-} // We_Gallery
+} // We_Gallery_Plugin
 
 $wegal = We_Gallery_Plugin::init();
