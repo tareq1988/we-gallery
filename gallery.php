@@ -43,7 +43,11 @@ if ( !defined( 'ABSPATH' ) ) exit;
  *
  * @class We_Gallery The class that holds the entire We_Gallery plugin
  */
-class We_Gallery {
+class We_Gallery_Plugin {
+
+    public static $post_type = 'we_gallery';
+
+    public $factory = null;
 
     /**
      * Constructor for the We_Gallery class
@@ -55,6 +59,8 @@ class We_Gallery {
      * @uses add_action()
      */
     public function __construct() {
+
+        spl_autoload_register( array( $this, 'autoload' ) );
 
         $this->set_constants();
         $this->file_includes();
@@ -70,6 +76,27 @@ class We_Gallery {
     }
 
     /**
+     * Autoload class files on demand
+     *
+     * `WPUF_Form_Posting` becomes => form-posting.php
+     * `WPUF_Dashboard` becomes => dashboard.php
+     *
+     * @param string $class requested class name
+     */
+    function autoload( $class ) {
+
+        if ( stripos( $class, 'We_Gallery' ) !== false ) {
+
+            $class_name = str_replace( array('We_Gallery', '_'), array('', '-'), $class );
+            $filename = dirname( __FILE__ ) . '/includes/class' . strtolower( $class_name ) . '.php';
+
+            if ( file_exists( $filename ) ) {
+                require_once $filename;
+            }
+        }
+    }
+
+    /**
      * Initializes the We_Gallery() class
      *
      * Checks for an existing We_Gallery() instance
@@ -79,7 +106,7 @@ class We_Gallery {
         static $instance = false;
 
         if ( ! $instance ) {
-            $instance = new We_Gallery();
+            $instance = new self;
         }
 
         return $instance;
@@ -95,9 +122,7 @@ class We_Gallery {
 
     private function file_includes() {
 
-        if ( is_admin() ) {
-            require_once WEGAL_DIR . '/includes/admin/class-admin-editor.php';
-        }
+        require_once WEGAL_DIR . '/includes/functions.php';
 
     }
 
@@ -106,6 +131,8 @@ class We_Gallery {
         if ( is_admin() ) {
             new We_Gallery_Admin_Editor();
         }
+
+        $this->factory = new We_Gallery_Factory();
     }
 
     /**
@@ -187,9 +214,12 @@ class We_Gallery {
             'capability_type'     => 'page',
         );
 
-        register_post_type( 'we_gallery', $args );
+        register_post_type( self::$post_type, $args );
     }
 
 } // We_Gallery
 
-$wegal = We_Gallery::init();
+$wegal = We_Gallery_Plugin::init();
+
+
+var_dump( wegal_get_gallery(197)->get_images() );

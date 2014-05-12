@@ -7,13 +7,14 @@
  */
 class We_Gallery_Admin_Editor {
 
-    const meta_key = '_wegal_images';
-
     function __construct() {
 
         add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
         add_action( 'add_meta_boxes_we_gallery', array($this, 'add_meta_box') );
         add_action( 'save_post', array( $this, 'save_images' ), 1, 2 ); // save the custom fields
+
+        add_action( 'media_buttons', array( $this, 'add_media_button' ), 20 );
+        add_action( 'admin_footer', array( $this, 'media_thickbox_content' ) );
 
         // custom columns
         add_filter( 'manage_edit-we_gallery_columns', array( $this, 'admin_column' ) );
@@ -45,6 +46,62 @@ class We_Gallery_Admin_Editor {
 
         // styles
         wp_enqueue_style( 'wegal-admin', WEGAL_ASSET_URI . '/css/admin.css' );
+    }
+
+    /**
+     * Adds a media button (for inserting a gallery) to the Post Editor
+     *
+     * @param  int  $editor_id The editor ID
+     * @return void
+     */
+    function add_media_button( $editor_id ) {
+        ?>
+            <a href="#TB_inline?width=480&amp;inlineId=wegal-select-gallery" class="button thickbox insert-gallery" data-editor="<?php echo esc_attr( $editor_id ); ?>" title="<?php _e( 'Add a Gallery', 'wegal' ); ?>">
+                <?php echo '<span class="wp-media-buttons-icon dashicons dashicons-images-alt2"></span>' . __( ' Add Gallery', 'wegal' ); ?>
+            </a>
+        <?php
+
+    }
+
+    public function media_thickbox_content() {
+
+        $galleries = array();
+        ?>
+
+        <script type="text/javascript">
+            function wegalInsertGallery() {
+                var gallery_id = jQuery('#wegal-gallery-dropdown').val();
+
+                if ( gallery_id === '0' ) {
+                    alert( '<?php _e( 'Please select a gallery', 'wegal' ); ?>' );
+                    return;
+                }
+
+                send_to_editor('[wegallery id="'+ gallery_id +'"]');
+                tb_remove();
+            }
+        </script>
+
+        <div id="wegal-select-gallery" style="display: none;">
+
+            <div class="gallery-select">
+                <select name="wegal_gallery" id="wegal-gallery-dropdown">
+                    <option value="0"><?php _e( 'Select a gallery', 'wegal' ); ?></option>
+                    <option value="1"><?php _e( 'Sample Gallery', 'wegal' ); ?></option>
+                    <?php
+                        foreach ( $galleries as $gallery ) {
+                            // echo "<option value='{$gallery->id}'>{$gallery->name} (ID #{$gallery->id})</option>";
+                        }
+                    ?>
+                </select>
+            </div>
+
+            <div class="submit-button">
+                <button id="wegal-gallery-insert" class="button-primary" onClick="wegalInsertGallery();"><?php _e( 'Insert Gallery', 'wegal' ); ?></button>
+                <button id="wegal-gallery-close" class="button-secondary" style="margin-left: 5px;" onClick="tb_remove();"><?php _e( 'Close', 'wegal' ); ?></a>
+            </div>
+        </div>
+        <?php
     }
 
     function gallery_updated_message( $messages ) {
@@ -123,7 +180,7 @@ class We_Gallery_Admin_Editor {
     }
 
     function get_images( $post_id ) {
-        return get_post_meta( $post_id, self::meta_key, true );
+        return get_post_meta( $post_id, wegal_get_meta_key(), true );
     }
 
     function gallery_editor() {
@@ -247,7 +304,8 @@ class We_Gallery_Admin_Editor {
             return $post->ID;
         }
 
-        $images = isset( $_POST['_wegal_image'] ) ? $_POST['_wegal_image'] : array();
-        update_post_meta( $post->ID, '_wegal_images', $images );
+        $images = isset( $_POST['_wegal_image'] ) ? array_map('intval', $_POST['_wegal_image']) : array();
+
+        update_post_meta( $post->ID, wegal_get_meta_key(), $images );
     }
 }
