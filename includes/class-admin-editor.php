@@ -79,28 +79,54 @@ class We_Gallery_Admin_Editor {
         <script type="text/javascript">
             function wegalInsertGallery() {
                 var gallery_id = jQuery('#wegal-gallery-dropdown').val();
+                var cols = jQuery('#wegal-gallery-cols').val();
 
                 if ( gallery_id === '-1' ) {
                     alert( '<?php _e( 'Please select a gallery', 'wegal' ); ?>' );
                     return;
                 }
 
-                send_to_editor('[wegallery id="' + gallery_id + '"]');
+                send_to_editor('[wegallery id="' + gallery_id + '" col="' + cols + '"]');
                 tb_remove();
             }
         </script>
 
+        <style type="text/css">
+            .wegal-popup-container {
+                padding: 15px 0 0 20px;
+            }
+            .wegal-div {
+                padding: 10px 0 10px 0;
+            }
+        </style>
+
         <div id="wegal-select-gallery" style="display: none;">
 
-            <div class="gallery-select">
-                <select name="wegal_gallery" id="wegal-gallery-dropdown">
-                    <?php echo wegal_get_gallery_dropdown(); ?>
-                </select>
-            </div>
+            <div class="wegal-popup-container">
 
-            <div class="submit-button">
-                <button id="wegal-gallery-insert" class="button-primary" onClick="wegalInsertGallery();"><?php _e( 'Insert Gallery', 'wegal' ); ?></button>
-                <button id="wegal-gallery-close" class="button-secondary" style="margin-left: 5px;" onClick="tb_remove();"><?php _e( 'Close', 'wegal' ); ?></a>
+                <h3><?php _e( 'Select a gallery to insert', 'wegal' ); ?></h3>
+
+                <div class="gallery-select wegal-div">
+                    <select name="wegal_gallery" id="wegal-gallery-dropdown">
+                        <?php echo wegal_get_gallery_dropdown(); ?>
+                    </select>
+                </div>
+
+                <div class="wegal-div">
+                    <select id="wegal-gallery-cols">
+                        <option value="3"><?php _e( '- Columns -', 'wegal' ); ?></option>
+                        <option value="2"><?php _e( '2 Columns', 'wegal' ); ?></option>
+                        <option value="3"><?php _e( '3 Columns', 'wegal' ); ?></option>
+                        <option value="4"><?php _e( '4 Columns', 'wegal' ); ?></option>
+                        <option value="5"><?php _e( '5 Columns', 'wegal' ); ?></option>
+                    </select>
+                </div>
+
+                <div class="submit-button wegal-div">
+                    <button id="wegal-gallery-insert" class="button-primary" onClick="wegalInsertGallery();"><?php _e( 'Insert Gallery', 'wegal' ); ?></button>
+                    <button id="wegal-gallery-close" class="button-secondary" style="margin-left: 5px;" onClick="tb_remove();"><?php _e( 'Close', 'wegal' ); ?></a>
+                </div>
+
             </div>
         </div>
         <?php
