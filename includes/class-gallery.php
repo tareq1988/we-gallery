@@ -21,7 +21,7 @@ class We_Gallery_Gallery {
     function __construct( $gallery ) {
 
         if ( is_a( $gallery, 'WP_Post') ) {
-            $this->ID = $gallery->ID;
+            $this->ID   = $gallery->ID;
             $this->post = $gallery;
         } else {
             $this->ID   = absint( $gallery );
@@ -58,11 +58,11 @@ class We_Gallery_Gallery {
         }
 
         $image_data = array(
-            'id' => $attachment_id,
+            'id'  => $attachment_id,
             'url' => $full_url,
-            'images' => array(
+            'sizes' => array(
                 'thumb' => wp_get_attachment_image( $attachment_id, 'thumbnail' ),
-                'full' => wp_get_attachment_image( $attachment_id, 'full' )
+                'full'  => wp_get_attachment_image( $attachment_id, 'full' )
             )
         );
 

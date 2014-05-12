@@ -63,21 +63,29 @@ class We_Gallery_Admin_Editor {
 
     }
 
+    /**
+     * Prints the thickbox popup content
+     *
+     * @return void
+     */
     public function media_thickbox_content() {
+        global $pagenow;
 
-        $galleries = array();
+        if ( !in_array( $pagenow, array( 'post.php', 'post-new.php') ) ) {
+            return;
+        }
         ?>
 
         <script type="text/javascript">
             function wegalInsertGallery() {
                 var gallery_id = jQuery('#wegal-gallery-dropdown').val();
 
-                if ( gallery_id === '0' ) {
+                if ( gallery_id === '-1' ) {
                     alert( '<?php _e( 'Please select a gallery', 'wegal' ); ?>' );
                     return;
                 }
 
-                send_to_editor('[wegallery id="'+ gallery_id +'"]');
+                send_to_editor('[wegallery id="' + gallery_id + '"]');
                 tb_remove();
             }
         </script>
@@ -86,13 +94,7 @@ class We_Gallery_Admin_Editor {
 
             <div class="gallery-select">
                 <select name="wegal_gallery" id="wegal-gallery-dropdown">
-                    <option value="0"><?php _e( 'Select a gallery', 'wegal' ); ?></option>
-                    <option value="1"><?php _e( 'Sample Gallery', 'wegal' ); ?></option>
-                    <?php
-                        foreach ( $galleries as $gallery ) {
-                            // echo "<option value='{$gallery->id}'>{$gallery->name} (ID #{$gallery->id})</option>";
-                        }
-                    ?>
+                    <?php echo wegal_get_gallery_dropdown(); ?>
                 </select>
             </div>
 
@@ -104,6 +106,12 @@ class We_Gallery_Admin_Editor {
         <?php
     }
 
+    /**
+     * Gallery update messages
+     *
+     * @param  array $messages
+     * @return array
+     */
     function gallery_updated_message( $messages ) {
         $message = array(
              0 => '',
@@ -179,10 +187,21 @@ class We_Gallery_Admin_Editor {
         add_meta_box( 'wegal-submitdiv', __( 'Publish', 'wegal' ), array($this, 'publish_button'), 'we_gallery', 'side', 'core' );
     }
 
+    /**
+     * Get image ids
+     *
+     * @param  int $post_id
+     * @return array
+     */
     function get_images( $post_id ) {
         return get_post_meta( $post_id, wegal_get_meta_key(), true );
     }
 
+    /**
+     * Gallery editor area
+     *
+     * @return void
+     */
     function gallery_editor() {
         global $post;
 
@@ -217,6 +236,12 @@ class We_Gallery_Admin_Editor {
         <?php
     }
 
+
+    /**
+     * Replaces the default publish button with our own
+     *
+     * @return void
+     */
     function publish_button() {
         global $post, $pagenow;
 

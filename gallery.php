@@ -73,6 +73,8 @@ class We_Gallery_Plugin {
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
+        // shortcode handler
+        add_shortcode( 'wegallery', array( $this, 'shortcode' ) );
     }
 
     /**
@@ -112,6 +114,11 @@ class We_Gallery_Plugin {
         return $instance;
     }
 
+    /**
+     * Defines required constants
+     *
+     * @return void
+     */
     private function set_constants() {
 
         define('WEGAL_DIR', dirname( __FILE__ ) );
@@ -120,12 +127,22 @@ class We_Gallery_Plugin {
 
     }
 
+    /**
+     * Includes required files
+     *
+     * @return void
+     */
     private function file_includes() {
 
         require_once WEGAL_DIR . '/includes/functions.php';
 
     }
 
+    /**
+     * Instantiate required classes
+     *
+     * @return void
+     */
     private function instantiate() {
 
         if ( is_admin() ) {
@@ -158,22 +175,12 @@ class We_Gallery_Plugin {
         /**
          * All styles goes here
          */
-        wp_enqueue_style( 'wegal-styles', plugins_url( 'css/style.css', __FILE__ ), false, date( 'Ymd' ) );
+        wp_enqueue_style( 'wegal-styles', WEGAL_ASSET_URI . '/css/style.css', false, date( 'Ymd' ) );
 
         /**
          * All scripts goes here
          */
-        wp_enqueue_script( 'wegal-scripts', plugins_url( 'js/script.js', __FILE__ ), array( 'jquery' ), false, true );
-
-
-        /**
-         * Example for setting up text strings from Javascript files for localization
-         *
-         * Uncomment line below and replace with proper localization variables.
-         */
-        // $translation_array = array( 'some_string' => __( 'Some string to translate', 'baseplugin' ), 'a_value' => '10' );
-        // wp_localize_script( 'base-plugin-scripts', 'baseplugin', $translation_array ) );
-
+        wp_enqueue_script( 'wegal-scripts', WEGAL_ASSET_URI . '/js/script.js', array( 'jquery' ), false, true );
     }
 
     function register_post_type() {
@@ -217,9 +224,46 @@ class We_Gallery_Plugin {
         register_post_type( self::$post_type, $args );
     }
 
+    public function shortcode( $atts, $contents = '' ) {
+        $atts = shortcode_atts( array(
+          'id'  => 0,
+          'col' => 3
+        ), $atts );
+
+        $gallery_id = (int) $atts['id'];
+        $column     = (int) $atts['col'];
+
+        if ( ! $gallery_id ) {
+            return;
+        }
+
+        $gallery = wegal_get_gallery( $gallery_id );
+
+        // bail out if no gallery found
+        if ( !$gallery ) {
+            return;
+        }
+
+        $gallery_images = $gallery->get_images();
+
+        // bail out if there are no images
+        if ( ! $gallery_images ) {
+            return;
+        }
+
+        $template_path = wegal_get_template( 'gallery' );
+
+        ob_start();
+
+        if ( file_exists( $template_path ) ) {
+            include $template_path;
+        }
+
+        $content = ob_get_clean();
+
+        return apply_filters( 'wegallery_shortcode', $content, $gallery_images, $gallery_id, $gallery );
+    }
+
 } // We_Gallery
 
 $wegal = We_Gallery_Plugin::init();
-
-
-var_dump( wegal_get_gallery(197)->get_images() );
