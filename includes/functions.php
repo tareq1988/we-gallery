@@ -111,3 +111,16 @@ function wegal_get_template( $file ) {
         return WEGAL_DIR . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . $file . '.php';
     }
 }
+
+/**
+ * Template function for showing a gallery in themes
+ *
+ * @param  int $gallery_id
+ * @param  array  $args
+ * @return void
+ */
+function wegal_show_gallery( $gallery_id, $args = array() ) {
+    $args['id'] = $gallery_id;
+
+    echo We_Gallery_Plugin::shortcode( $args );
+}
