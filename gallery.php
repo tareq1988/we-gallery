@@ -171,7 +171,7 @@ class We_Gallery_Plugin {
         /**
          * All scripts goes here
          */
-        wp_enqueue_script( 'wegal-flexslider', WEGAL_ASSET_URI . '/js/jquery.flexslider.js', array( 'jquery' ), false, true );
+        wp_enqueue_script( 'wegal-flexslider', WEGAL_ASSET_URI . '/js/jquery.flexslider.min.js', array( 'jquery' ), false, true );
         // wp_enqueue_script( 'wegal-scripts', WEGAL_ASSET_URI . '/js/script.js', array( 'jquery' ), false, true );
     }
 

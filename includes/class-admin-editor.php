@@ -38,6 +38,8 @@ class We_Gallery_Admin_Editor {
             return;
         }
 
+        wp_enqueue_script( 'wegal-shortcode', WEGAL_ASSET_URI . '/js/admin-shortcode.js', array('jquery') );
+
         if ( $current_screen->post_type != 'we_gallery' ) {
             return;
         }
@@ -82,151 +84,8 @@ class We_Gallery_Admin_Editor {
         if ( !in_array( $pagenow, array( 'post.php', 'post-new.php') ) ) {
             return;
         }
-        ?>
 
-        <script type="text/javascript">
-            function wegalInsertGallery() {
-                var shortcode  = '[wegallery ',
-                    gallery_id = jQuery('#wegal-gallery-dropdown').val(),
-                    type       = jQuery('#wegal-gallery-type').val();
-
-                if ( gallery_id === '-1' ) {
-                    alert( '<?php _e( 'Please select a gallery', 'wegal' ); ?>' );
-                    return;
-                }
-
-                shortcode += 'id="' + gallery_id + '" ';
-
-                if ( type === 'grid' ) {
-                    var cols    = jQuery('#wegal-gallery-cols').val();
-                    var link    = jQuery('#wegal-gallery-link').val();
-                    var caption = jQuery('input[type="radio"][name="wegal-gallery-caption"]:checked').val();
-
-                    shortcode += 'type="grid" col="' + cols + '" link="' + link + '" caption="' + caption + '"';
-                } else {
-                    var title = jQuery('#wegal-gallery-title').is(':checked') ? 'yes' : 'no';
-                    var desc  = jQuery('#wegal-gallery-desc').is(':checked') ? 'yes' : 'no';
-
-                    shortcode += 'type="slider" title="' + title + '" desc="' + desc + '"';
-                }
-
-                shortcode += ']';
-
-                send_to_editor(shortcode);
-                tb_remove();
-            }
-
-            jQuery(function($) {
-
-                $('#wegal-gallery-type').on('change', function() {
-                    var val = $(this).val();
-
-                    if ( val === 'grid' ) {
-                        $('.show-if-grid').show();
-                        $('.show-if-slider').hide();
-                    } else {
-                        $('.show-if-grid').hide();
-                        $('.show-if-slider').show();
-                    }
-                });
-
-                $('#wegal-gallery-type').trigger('change');
-
-            });
-        </script>
-
-        <style type="text/css">
-            .wegal-popup-container {
-                padding: 15px 0 0 20px;
-            }
-            .wegal-div {
-                padding: 0 0 10px 0;
-            }
-            .wegal-div label.label {
-                float: left;
-                width: 12%;
-            }
-
-            .wegal-div label.checkbox {
-                width: 100%;
-                padding-left: 12%;
-            }
-
-        </style>
-
-        <div id="wegal-select-gallery" style="display: none;">
-
-            <div class="wegal-popup-container">
-
-                <h3><?php _e( 'Select a gallery to insert', 'wegal' ); ?></h3>
-
-                <div class="gallery-select wegal-div">
-                    <label for="wegal-gallery-dropdown" class="label"><?php _e( 'Gallery', 'wegal' ); ?></label>
-
-                    <select name="wegal_gallery" id="wegal-gallery-dropdown">
-                        <?php echo wegal_get_gallery_dropdown(); ?>
-                    </select>
-                </div>
-
-                <div class="wegal-div">
-                    <label for="wegal-gallery-type" class="label"><?php _e( 'Type', 'wegal' ); ?></label>
-
-                    <select id="wegal-gallery-type">
-                        <option value="grid"><?php _e( 'Grid', 'wegal' ); ?></option>
-                        <option value="slider"><?php _e( 'Slider', 'wegal' ); ?></option>
-                    </select>
-                </div>
-
-                <div class="wegal-div show-if-grid">
-                    <label for="wegal-gallery-cols" class="label"><?php _e( 'Columns', 'wegal' ); ?></label>
-
-                    <select id="wegal-gallery-cols">
-                        <option value="2"><?php _e( '2 Columns', 'wegal' ); ?></option>
-                        <option value="3" selected="selected"><?php _e( '3 Columns', 'wegal' ); ?></option>
-                        <option value="4"><?php _e( '4 Columns', 'wegal' ); ?></option>
-                        <option value="5"><?php _e( '5 Columns', 'wegal' ); ?></option>
-                    </select>
-                </div>
-
-                <div class="wegal-div show-if-grid">
-                    <label for="wegal-gallery-link" class="label"><?php _e( 'Link To', 'wegal' ); ?></label>
-
-                    <select id="wegal-gallery-link">
-                        <option value="file"><?php _e( 'Media File', 'wegal' ); ?></option>
-                        <option value="post"><?php _e( 'Attachment Page', 'wegal' ); ?></option>
-                        <option value="none"><?php _e( 'None', 'wegal' ); ?></option>
-                    </select>
-                </div>
-
-                <div class="wegal-div show-if-grid">
-                    <label for="wegal-gallery-caption" class="label"><?php _e( 'Caption', 'wegal' ); ?></label>
-
-                    <label><input type="radio" name="wegal-gallery-caption" checked="checked" value="yes"><?php _e( 'Show', 'wegal' ); ?></label>
-                    <label><input type="radio" name="wegal-gallery-caption" value="no"><?php _e( 'Hide', 'wegal' ); ?></label>
-                </div>
-
-                <div class="wegal-div show-if-slider">
-                    <label for="wegal-gallery-title" class="checkbox">
-                        <input type="checkbox" id="wegal-gallery-title" value="yes">
-                        <?php _e( 'Show Title', 'wegal' ); ?>
-                    </label>
-                </div>
-
-                <div class="wegal-div show-if-slider">
-                    <label for="wegal-gallery-desc" class="checkbox">
-                        <input type="checkbox" id="wegal-gallery-desc" value="yes">
-                        <?php _e( 'Show Description', 'wegal' ); ?>
-                    </label>
-                </div>
-
-                <div class="submit-button wegal-div">
-                    <button id="wegal-gallery-insert" class="button-primary" onClick="wegalInsertGallery();"><?php _e( 'Insert Gallery', 'wegal' ); ?></button>
-                    <button id="wegal-gallery-close" class="button-secondary" style="margin-left: 5px;" onClick="tb_remove();"><?php _e( 'Close', 'wegal' ); ?></a>
-                </div>
-
-            </div>
-        </div>
-        <?php
+        include dirname( __FILE__ ) . '/shortcode-builder.php';
     }
 
     /**
@@ -359,7 +218,7 @@ class We_Gallery_Admin_Editor {
         </div>
         <?php
 
-        include dirname( __FILE__ ) . '/views/popup.php';
+        include dirname( __FILE__ ) . '/views/image-details-popup.php';
     }
 
 

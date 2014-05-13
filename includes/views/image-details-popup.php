@@ -7,9 +7,7 @@
 
     <div class="wegal-box-inside">
         <div id="wegal-ajax-content">
-
             <span class="spinner"></span>
-
         </div>
     </div>
 
