@@ -48,13 +48,6 @@ if ( !defined( 'ABSPATH' ) ) exit;
 class We_Gallery_Plugin {
 
     /**
-     * Gallery factory object
-     *
-     * @var \We_Gallery_Factory
-     */
-    public $factory = null;
-
-    /**
      * Constructor for the We_Gallery class
      *
      * Sets up all the appropriate hooks and actions
@@ -148,8 +141,6 @@ class We_Gallery_Plugin {
         if ( is_admin() ) {
             new We_Gallery_Admin_Editor();
         }
-
-        $this->factory = new We_Gallery_Factory();
     }
 
     /**
@@ -180,7 +171,8 @@ class We_Gallery_Plugin {
         /**
          * All scripts goes here
          */
-        wp_enqueue_script( 'wegal-scripts', WEGAL_ASSET_URI . '/js/script.js', array( 'jquery' ), false, true );
+        wp_enqueue_script( 'wegal-flexslider', WEGAL_ASSET_URI . '/js/jquery.flexslider.js', array( 'jquery' ), false, true );
+        // wp_enqueue_script( 'wegal-scripts', WEGAL_ASSET_URI . '/js/script.js', array( 'jquery' ), false, true );
     }
 
     /**
@@ -236,20 +228,22 @@ class We_Gallery_Plugin {
      * @param  string $contents
      * @return string
      */
-    public function shortcode( $atts, $contents = '' ) {
-        $atts = shortcode_atts( array(
-          'id'  => 0,
-          'col' => 3
-        ), $atts );
+    public static function shortcode( $atts, $contents = '' ) {
+        extract( shortcode_atts( array(
+          'id'      => 0,
+          'type'    => 'grid',
+          'col'     => 3,
+          'link'    => 'file',
+          'caption' => 'yes',
+          'title'   => 'no',
+          'desc'    => 'no'
+        ), $atts ) );
 
-        $gallery_id = (int) $atts['id'];
-        $column     = (int) $atts['col'];
-
-        if ( ! $gallery_id ) {
+        if ( ! $id || ! in_array( $type, array('grid', 'slider') ) ) {
             return;
         }
 
-        $gallery = wegal_get_gallery( $gallery_id );
+        $gallery = wegal_get_gallery( $id );
 
         // bail out if no gallery found
         if ( !$gallery ) {
@@ -263,7 +257,11 @@ class We_Gallery_Plugin {
             return;
         }
 
-        $template_path = wegal_get_template( 'gallery' );
+        if ( $type == 'grid' ) {
+            $template_path = wegal_get_template( 'gallery-grid' );
+        } else {
+            $template_path = wegal_get_template( 'gallery-slider' );
+        }
 
         ob_start();
 
@@ -273,7 +271,7 @@ class We_Gallery_Plugin {
 
         $content = ob_get_clean();
 
-        return apply_filters( 'wegallery_shortcode', $content, $gallery_images, $gallery_id, $gallery );
+        return apply_filters( 'wegallery_shortcode', $content, $gallery_images, $id, $gallery );
     }
 
 } // We_Gallery_Plugin

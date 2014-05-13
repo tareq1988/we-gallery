@@ -26,7 +26,7 @@ function wegal_get_meta_key() {
  * @return \We_Gallery_Gallery
  */
 function wegal_get_gallery( $the_gallery, $args = array() ) {
-    return We_Gallery_Plugin::init()->factory->get_gallery( $the_gallery, $args );
+    return new We_Gallery_Gallery( $the_gallery, $args );
 }
 
 /**

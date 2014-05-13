@@ -19,14 +19,27 @@ class We_Gallery_Gallery {
      * @param mixed $gallery
      */
     function __construct( $gallery ) {
+        global $post;
 
-        if ( is_a( $gallery, 'WP_Post') ) {
-            $this->ID   = $gallery->ID;
-            $this->post = $gallery;
+        if ( false === $gallery ) {
+            $the_gallery = $post;
+
+        } elseif ( is_numeric( $gallery ) ) {
+            $the_gallery = get_post( $gallery );
+
+        } elseif ( is_a( $gallery, 'WP_Post') ) {
+            $the_gallery = $gallery;
+
         } else {
-            $this->ID   = absint( $gallery );
-            $this->post = get_post( $this->ID );
+            $the_gallery = get_post( absint( $gallery ) );
         }
+
+        if ( ! $the_gallery ) {
+            return false;
+        }
+
+        $this->ID   = $the_gallery->ID;
+        $this->post = $the_gallery;
     }
 
     /**
@@ -51,19 +64,22 @@ class We_Gallery_Gallery {
      * @return array attachment details
      */
     public function get_image( $attachment_id ) {
-        $full_url = wp_get_attachment_url( $attachment_id );
+        $attachment = get_post( $attachment_id );
 
-        if ( !$full_url ) {
-            return false;
+        if ( !$attachment || $attachment->post_type != 'attachment' ) {
+            return;
         }
 
         $image_data = array(
-            'id'  => $attachment_id,
-            'url' => $full_url,
+            'id'          => $attachment_id,
+            'caption'     => $attachment->post_excerpt,
+            'title'       => $attachment->post_title,
+            'description' => $attachment->post_content,
+            'url'         => wp_get_attachment_url( $attachment_id ),
             'sizes' => array(
                 'thumb' => wp_get_attachment_image( $attachment_id, 'thumbnail' ),
                 'full'  => wp_get_attachment_image( $attachment_id, 'full' )
-            )
+            ),
         );
 
         return apply_filters( 'wegal_get_image', $image_data, $attachment_id, $this->ID, $this->post );
@@ -83,7 +99,9 @@ class We_Gallery_Gallery {
 
         $image_array = array();
         foreach ($image_ids as $attachment_id) {
-            $image_array[] = $this->get_image($attachment_id);
+            if ( $image = $this->get_image( $attachment_id ) ) {
+                $image_array[] = $image;
+            }
         }
 
         return apply_filters( 'wegal_get_images', $image_array, $image_ids, $this->ID, $this->post );
