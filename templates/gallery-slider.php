@@ -15,6 +15,16 @@
 
                 <li>
                     <?php echo $image['sizes']['full'] ?>
+
+                    <div class="wegal-flex-caption">
+                        <?php if ( $title == 'yes' && ! empty( $image['title'] ) ) {
+                            echo '<h3>' . wp_kses_post( $image['title'] ) . '</h3>';
+                        } ?>
+
+                        <?php if ( $desc == 'yes' && ! empty( $image['description'] ) ) {
+                            echo '<div class="details">' . wp_kses_post( $image['description'] ) . '</div>';
+                        } ?>
+                    </div>
                 </li>
 
             <?php } ?>
@@ -27,7 +37,8 @@ jQuery(function($) {
     $('#wegallery-slier-<?php echo $id; ?>').flexslider({
         animation: 'slide',
         controlNav: false,
-        directionNav: true
+        directionNav: true,
+        // smoothHeight: true
     });
 });
 </script>

@@ -60,6 +60,27 @@ ul.wegallery-gallery.wegal-col-5 li {
 ul.wegallery-gallery.wegal-col-5 li:nth-child(5n+1) {
   clear: left;
 }
+.wegal-flex-caption {
+  background: none repeat scroll 0 0 rgba(0, 0, 0, 0.6);
+  bottom: 0;
+  color: #FFFFFF;
+  font-size: 14px;
+  left: 0;
+  line-height: 18px;
+  position: absolute;
+  text-align: center;
+  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.3);
+  width: 100%;
+  padding: 2%;
+}
+.wegal-flex-caption h3 {
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+.wegal-flex-caption .details {
+  padding-top: 10px;
+}
 /* Browser Resets
 *********************************/
 .flex-container a:active,
@@ -94,6 +115,7 @@ ul.wegallery-gallery.wegal-col-5 li:nth-child(5n+1) {
 .wegal-flexslider .slides > li {
   display: none;
   -webkit-backface-visibility: hidden;
+  position: relative;
 }
 /* Hide the slides before the JS is loaded. Avoids image jumping */
 .wegal-flexslider .slides img {
