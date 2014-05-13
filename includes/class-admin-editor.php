@@ -21,6 +21,8 @@ class We_Gallery_Admin_Editor {
         add_action( 'manage_we_gallery_posts_custom_column', array( $this, 'admin_column_value' ), 10, 2 );
 
         add_filter( 'post_updated_messages', array($this, 'gallery_updated_message') );
+
+        add_action( 'wp_ajax_wegal_save_image_details', array($this, 'update_image' ) );
     }
 
     /**
@@ -42,10 +44,16 @@ class We_Gallery_Admin_Editor {
 
         // scripts
         wp_enqueue_media();
+        wp_enqueue_script( 'thickbox' );
         wp_enqueue_script( 'wegal-admin', WEGAL_ASSET_URI . '/js/admin.js', array('jquery', 'underscore') );
 
         // styles
+        wp_enqueue_style( 'thickbox' );
         wp_enqueue_style( 'wegal-admin', WEGAL_ASSET_URI . '/css/admin.css' );
+        wp_localize_script( 'wegal-admin', 'wegalAdmin', array(
+            'ajaxurl' => admin_url( 'admin-ajax.php' ),
+            'nonce'   => wp_create_nonce( 'wegal-update-image' )
+        ) );
     }
 
     /**
@@ -195,18 +203,18 @@ class We_Gallery_Admin_Editor {
                     echo __( 'No images', 'wegal' );
                 }
 
-
                 break;
         }
     }
 
     /**
-     * Add meta boxes to post form builder
+     * Add meta boxes to gallery builder
      *
      * @return void
      */
     function add_meta_box() {
 
+        // remove core submit div
         remove_meta_box('submitdiv', 'we_gallery', 'side');
 
         add_meta_box( 'wegal-gallery', __( 'Gallery Images', 'wegal' ), array($this, 'gallery_editor'), 'we_gallery', 'normal', 'high' );
@@ -250,6 +258,7 @@ class We_Gallery_Admin_Editor {
                             <?php echo $image_src; ?>
 
                             <a href="#" class="image-delete">&times;</a>
+                            <a href="#" class="image-edit dashicons dashicons-edit" data-attachment_id="<?php echo $image_id; ?>">&nbsp;</a>
                             <input name="_wegal_image[]" value="<?php echo $image_id; ?>" type="hidden">
                         </div>
 
@@ -260,6 +269,8 @@ class We_Gallery_Admin_Editor {
 
         </div>
         <?php
+
+        include dirname( __FILE__ ) . '/views/popup.php';
     }
 
 
@@ -358,5 +369,37 @@ class We_Gallery_Admin_Editor {
         $images = isset( $_POST['_wegal_image'] ) ? array_map('intval', $_POST['_wegal_image']) : array();
 
         update_post_meta( $post->ID, wegal_get_meta_key(), $images );
+    }
+
+    /**
+     * Update image details via ajax
+     *
+     * @return void
+     */
+    function update_image() {
+        if ( ! $id = absint( $_REQUEST['id'] ) ) {
+            wp_send_json_error();
+        }
+
+        check_ajax_referer( 'wegal-update-image' );
+
+        $post = get_post( $id, ARRAY_A );
+
+        if ( 'attachment' != $post['post_type'] ) {
+            wp_send_json_error();
+        }
+
+        $post['post_title']   = $_POST['title'];
+        $post['post_excerpt'] = $_POST['caption'];
+        $post['post_content'] = $_POST['description'];
+
+        $alt = wp_unslash( $_POST['alt'] );
+        if ( $alt != get_post_meta( $id, '_wp_attachment_image_alt', true ) ) {
+            $alt = wp_strip_all_tags( $alt, true );
+            update_post_meta( $id, '_wp_attachment_image_alt', wp_slash( $alt ) );
+        }
+
+        wp_update_post( $post );
+        wp_send_json_success();
     }
 }
