@@ -92,6 +92,9 @@ function wegal_get_gallery_dropdown() {
 /**
  * Get a overridable file path
  *
+ * Searches to the child theme directory, then parent theme directory.
+ * If not found, fallbacks to the plugins template file.
+ *
  * @param  string $file name of the php file without extension
  * @return string path of the file
  */
