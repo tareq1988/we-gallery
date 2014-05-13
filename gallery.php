@@ -7,6 +7,7 @@
  * Author: Tareq Hasan
  * Author URI: http://tareq.wedevs.com/
  * License: GPL2
+ * TextDomain: wegal
  */
 
 /**
