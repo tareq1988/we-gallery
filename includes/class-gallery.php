@@ -63,7 +63,7 @@ class We_Gallery_Gallery {
      * @param  int $attachment_id
      * @return array attachment details
      */
-    public function get_image( $attachment_id ) {
+    public function get_image( $attachment_id, $context = 'grid' ) {
         $attachment = get_post( $attachment_id );
 
         if ( !$attachment || $attachment->post_type != 'attachment' ) {
@@ -78,9 +78,13 @@ class We_Gallery_Gallery {
             'url'         => wp_get_attachment_url( $attachment_id ),
             'sizes' => array(
                 'thumb' => wp_get_attachment_image( $attachment_id, 'thumbnail' ),
-                'full'  => wp_get_attachment_image( $attachment_id, 'full' )
+                'full'  => wp_get_attachment_image( $attachment_id, 'full' ),
             ),
         );
+
+        if ( $context == 'slider' ) {
+            $image_data['sizes']['slider'] = wp_get_attachment_image( $attachment_id, 'weslider-slide-image' );
+        }
 
         return apply_filters( 'wegal_get_image', $image_data, $attachment_id, $this->ID, $this->post );
     }
@@ -90,7 +94,7 @@ class We_Gallery_Gallery {
      *
      * @return array
      */
-    public function get_images() {
+    public function get_images( $context = 'grid' ) {
         $image_ids = $this->get_image_ids();
 
         if ( !$image_ids ) {
@@ -99,7 +103,7 @@ class We_Gallery_Gallery {
 
         $image_array = array();
         foreach ($image_ids as $attachment_id) {
-            if ( $image = $this->get_image( $attachment_id ) ) {
+            if ( $image = $this->get_image( $attachment_id, $context ) ) {
                 $image_array[] = $image;
             }
         }

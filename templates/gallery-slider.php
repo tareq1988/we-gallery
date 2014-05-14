@@ -27,7 +27,7 @@
                         <?php echo $image['sizes']['full'] ?>
                     <?php } else { ?>
                         <a href="<?php echo $url; ?>" data-type="<?php echo $link; ?>" rel="wegal-image">
-                            <?php echo $image['sizes']['thumb'] ?>
+                            <?php echo $image['sizes']['slider'] ?>
                         </a>
                     <?php } ?>
 

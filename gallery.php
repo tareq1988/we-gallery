@@ -2,7 +2,7 @@
 /**
  * Plugin Name: We Gallery
  * Plugin URI: http://wedevs.com/
- * Description: A simple gallery for WordPress at its best
+ * Description: The missing gallery of WordPress. Simple, yet the effective gallery plugin!
  * Version: 0.1
  * Author: Tareq Hasan
  * Author URI: http://tareq.wedevs.com/
@@ -69,9 +69,13 @@ class We_Gallery_Plugin {
         add_action( 'init', array( $this, 'localization_setup' ) );
         add_action( 'init', array( $this, 'register_post_type' ), 0 );
 
+        add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( $this, 'action_links' ) );
+
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
         add_action( 'wp_footer', array( $this, 'popup_script' ) );
+
+        add_action( 'after_setup_theme', array( $this, 'image_sizes' ) );
 
         // shortcode handler
         add_shortcode( 'wegallery', array( $this, 'shortcode' ) );
@@ -155,6 +159,19 @@ class We_Gallery_Plugin {
     }
 
     /**
+     * Show action links on the plugin screen
+     *
+     * @param mixed $links
+     * @return array
+     */
+    public function action_links( $links ) {
+        return array_merge( array(
+            '<a href="' . admin_url( 'edit.php?post_type=we_gallery' ) . '">' . __( 'Settings', 'wegal' ) . '</a>',
+            '<a href="' . esc_url( 'http://wedevs.com/support' ) . '">' . __( 'Support', 'wegal' ) . '</a>',
+        ), $links );
+    }
+
+    /**
      * Enqueue admin scripts
      *
      * Allows plugin assets to be loaded.
@@ -224,6 +241,25 @@ class We_Gallery_Plugin {
     }
 
     /**
+     * Add slider image size
+     *
+     * It matches the content area width of the theme
+     *
+     * @return void
+     */
+    function image_sizes() {
+        global $content_width;
+
+        $default_width = 640;
+        $default_height = 360;
+
+        $theme_width = empty( $content_width ) ? $default_width : $content_width;
+        $theme_height = empty( $content_width ) ? $default_height : round( ( $default_height * $theme_width ) / $default_width );
+
+        add_image_size( 'weslider-slide-image', $theme_width, $theme_height, true);
+    }
+
+    /**
      * Shortcode handler function
      *
      * @param  array $atts
@@ -255,7 +291,7 @@ class We_Gallery_Plugin {
             return;
         }
 
-        $gallery_images = $gallery->get_images();
+        $gallery_images = $gallery->get_images( $type );
 
         // bail out if there are no images
         if ( ! $gallery_images ) {
@@ -285,7 +321,7 @@ class We_Gallery_Plugin {
     }
 
     /**
-     * Popup js
+     * Image Popup js
      *
      * @return void
      */
