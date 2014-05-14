@@ -1,6 +1,6 @@
 # We Gallery
 
-The missing gallery for WordPress. Simple, yet the effective gallery plugin!
+The missing gallery of WordPress. Simple, yet the effective gallery plugin!
 
 
 If you are looking for a simple, easy to use and lightweight gallery plugin, **We Gallery** is here for that. It's the only gallery plugin you'll need.

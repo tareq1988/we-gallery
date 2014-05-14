@@ -7,7 +7,7 @@ Tested up to: 3.9.1
 Stable tag: trunk
 Donate Link: http://tareq.wedevs.com/donate/
 
-The missing gallery for WordPress. Simple, yet the effective gallery plugin!
+The missing gallery of WordPress. Simple, yet the effective gallery plugin!
 
 == Description ==
 
