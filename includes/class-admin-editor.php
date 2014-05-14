@@ -85,7 +85,7 @@ class We_Gallery_Admin_Editor {
             return;
         }
 
-        include dirname( __FILE__ ) . '/shortcode-builder.php';
+        include dirname( __FILE__ ) . '/views/shortcode-builder.php';
     }
 
     /**

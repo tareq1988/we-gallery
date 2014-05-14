@@ -11,10 +11,25 @@
     <div class="wegal-flexslider" id="wegallery-slier-<?php echo $id; ?>">
         <ul class="wegallery-gallery slides">
 
-            <?php foreach ($gallery_images as $image) { ?>
+            <?php foreach ($gallery_images as $image) {
+
+                if ( $link == 'file' ) {
+                    $url = esc_url( $image['url'] );
+                } elseif ( $link == 'post' ) {
+                    $url = get_permalink( $image['id'] );
+                } else {
+                    $url = false;
+                }
+                ?>
 
                 <li>
-                    <?php echo $image['sizes']['full'] ?>
+                    <?php if ( ! $url ) { ?>
+                        <?php echo $image['sizes']['full'] ?>
+                    <?php } else { ?>
+                        <a href="<?php echo $url; ?>" data-type="<?php echo $link; ?>" rel="wegal-image">
+                            <?php echo $image['sizes']['thumb'] ?>
+                        </a>
+                    <?php } ?>
 
                     <div class="wegal-flex-caption">
                         <?php if ( $title == 'yes' && ! empty( $image['title'] ) ) {
@@ -35,10 +50,9 @@
 <script type="text/javascript">
 jQuery(function($) {
     $('#wegallery-slier-<?php echo $id; ?>').flexslider({
-        animation: 'slide',
-        controlNav: false,
-        directionNav: true,
-        // smoothHeight: true
+        animation: '<?php echo $animation ?>',
+        controlNav: <?php echo $nav; ?>,
+        directionNav: <?php echo $direction; ?>,
     });
 });
 </script>

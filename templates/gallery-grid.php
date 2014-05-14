@@ -18,15 +18,19 @@
             } elseif ( $link == 'post' ) {
                 $url = get_permalink( $image['id'] );
             } else {
-                $url = '#';
+                $url = false;
             }
             ?>
 
             <li class="wegal-thumb">
                 <div class="wegal-inside">
-                    <a href="<?php echo $url; ?>" data-type="<?php echo $link; ?>" rel="wegal-image">
-                        <?php echo $image['sizes']['thumb'] ?>
-                    </a>
+                    <?php if ( ! $url ) { ?>
+                        <?php echo $image['sizes']['full'] ?>
+                    <?php } else { ?>
+                        <a href="<?php echo $url; ?>" data-type="<?php echo $link; ?>" rel="wegal-image">
+                            <?php echo $image['sizes']['thumb'] ?>
+                        </a>
+                    <?php } ?>
 
                     <?php if ( $caption == 'yes' ) { ?>
 

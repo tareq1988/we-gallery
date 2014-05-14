@@ -24,10 +24,15 @@ jQuery(function($) {
 
             shortcode += 'type="grid" col="' + cols + '" caption="' + caption + '"';
         } else {
-            var title = jQuery('#wegal-gallery-title').is(':checked') ? 'yes' : 'no';
-            var desc  = jQuery('#wegal-gallery-desc').is(':checked') ? 'yes' : 'no';
+            var title     = jQuery('#wegal-gallery-title').is(':checked') ? 'yes' : 'no';
+            var desc      = jQuery('#wegal-gallery-desc').is(':checked') ? 'yes' : 'no';
+            var animation = jQuery('#wegal-gallery-animation').val();
+            var direction = jQuery('input[type="radio"][name="wegal-gallery-direction"]:checked').val();
+            var nav       = jQuery('input[type="radio"][name="wegal-gallery-nav"]:checked').val();
 
             shortcode += 'type="slider" title="' + title + '" desc="' + desc + '"';
+            shortcode += ' animation="' + animation + '" direction="' + direction + '"';
+            shortcode += ' nav="' + nav + '"';
         }
 
         var link = jQuery('#wegal-gallery-link').val();

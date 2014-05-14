@@ -71,6 +71,7 @@ class We_Gallery_Plugin {
 
         // Loads frontend scripts and styles
         add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+        add_action( 'wp_footer', array( $this, 'popup_script' ) );
 
         // shortcode handler
         add_shortcode( 'wegallery', array( $this, 'shortcode' ) );
@@ -173,7 +174,7 @@ class We_Gallery_Plugin {
          * All scripts goes here
          */
         wp_enqueue_script( 'wegal-flexslider', WEGAL_ASSET_URI . '/js/jquery.flexslider.min.js', array( 'jquery' ), false, true );
-        // wp_enqueue_script( 'wegal-scripts', WEGAL_ASSET_URI . '/js/script.js', array( 'jquery' ), false, true );
+        wp_enqueue_script( 'wegal-magnific', WEGAL_ASSET_URI . '/js/jquery.magnific-popup.min.js', array( 'jquery' ), false, true );
     }
 
     /**
@@ -231,13 +232,16 @@ class We_Gallery_Plugin {
      */
     public static function shortcode( $atts, $contents = '' ) {
         extract( shortcode_atts( array(
-          'id'      => 0,
-          'type'    => 'grid',
-          'col'     => 3,
-          'link'    => 'file',
-          'caption' => 'yes',
-          'title'   => 'no',
-          'desc'    => 'no'
+          'id'        => 0,
+          'type'      => 'grid',
+          'col'       => 3,
+          'link'      => 'file',
+          'caption'   => 'yes',
+          'title'     => 'no',
+          'desc'      => 'no',
+          'animation' => 'slide',
+          'direction' => 'yes',
+          'nav'       => 'no',
         ), $atts ) );
 
         if ( ! $id || ! in_array( $type, array('grid', 'slider') ) ) {
@@ -261,6 +265,11 @@ class We_Gallery_Plugin {
         if ( $type == 'grid' ) {
             $template_path = wegal_get_template( 'gallery-grid' );
         } else {
+
+            $animation     = in_array($animation, array('slide', 'fade')) ? $animation : 'slide';
+            $direction     = ( $direction == 'yes' ) ? 'true' : 'false';
+            $nav           = ( $nav == 'yes' ) ? 'true' : 'false';
+
             $template_path = wegal_get_template( 'gallery-slider' );
         }
 
@@ -273,6 +282,30 @@ class We_Gallery_Plugin {
         $content = ob_get_clean();
 
         return apply_filters( 'wegallery_shortcode', $content, $gallery_images, $id, $gallery );
+    }
+
+    /**
+     * Popup js
+     *
+     * @return void
+     */
+    public function popup_script() {
+        ?>
+        <script type="text/javascript">
+            jQuery(function($) {
+                $('.wegal-gallery-wrap').magnificPopup({
+                    delegate: 'a[data-type="file"]',
+                    type: 'image',
+                    zoom: {
+                        enabled: true,
+                    },
+                    gallery:{
+                        enabled:true
+                    }
+                });
+            });
+        </script>
+        <?php
     }
 
 } // We_Gallery_Plugin

@@ -63,6 +63,29 @@
             </label>
         </div>
 
+        <div class="wegal-div show-if-slider">
+            <label for="wegal-gallery-animation" class="label"><?php _e( 'Animation', 'wegal' ); ?></label>
+
+            <select id="wegal-gallery-animation">
+                <option value="slide"><?php _e( 'Slide', 'wegal' ); ?></option>
+                <option value="fade"><?php _e( 'Fade', 'wegal' ); ?></option>
+            </select>
+        </div>
+
+        <div class="wegal-div show-if-slider">
+            <label for="wegal-gallery-nav" class="label"><?php _e( 'Navigation', 'wegal' ); ?></label>
+
+            <label><input type="radio" name="wegal-gallery-nav" checked="checked" value="yes"><?php _e( 'Show', 'wegal' ); ?></label>
+            <label><input type="radio" name="wegal-gallery-nav" value="no"><?php _e( 'Hide', 'wegal' ); ?></label>
+        </div>
+
+        <div class="wegal-div show-if-slider">
+            <label for="wegal-gallery-direction" class="label"><?php _e( 'Direction', 'wegal' ); ?></label>
+
+            <label><input type="radio" name="wegal-gallery-direction" checked="checked" value="yes"><?php _e( 'Show', 'wegal' ); ?></label>
+            <label><input type="radio" name="wegal-gallery-direction" value="no"><?php _e( 'Hide', 'wegal' ); ?></label>
+        </div>
+
         <div class="submit-button wegal-div">
             <button id="wegal-gallery-insert" class="button-primary"><?php _e( 'Insert Gallery', 'wegal' ); ?></button>
             <button id="wegal-gallery-close" class="button-secondary" style="margin-left: 5px;" onClick="tb_remove();"><?php _e( 'Close', 'wegal' ); ?></a>
@@ -77,14 +100,15 @@
     }
     .wegal-div {
         padding: 0 0 10px 0;
+        clear: left;
     }
     .wegal-div label.label {
         float: left;
-        width: 12%;
+        width: 15%;
     }
 
     .wegal-div label.checkbox {
         width: 100%;
-        padding-left: 12%;
+        padding-left: 15%;
     }
 </style>
