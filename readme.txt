@@ -49,6 +49,14 @@ Nothing here yet!
 
 == Screenshots ==
 
+1. Create a new gallery
+2. Update image details
+3. Gallery List
+4. Gallery shortcode builder - grid
+5. Gallery shortcode builder - slider
+6. Grid Display
+7. Slider Display
+8. Image popup
 
 == Changelog ==
 
