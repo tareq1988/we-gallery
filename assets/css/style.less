@@ -2,6 +2,7 @@
 
 .wegal-gallery-wrap {
     margin: 15px 0;
+    width: 100%;
 }
 
 ul.wegallery-gallery {
@@ -15,7 +16,8 @@ ul.wegallery-gallery {
     li.wegal-thumb {
         float: left;
         display: inline;
-        padding: 0;
+        padding: 0 !important;
+        margin: 0 !important;
 
         .wegal-inside {
             margin: 0 20px 20px 0;
@@ -123,7 +125,7 @@ ul.wegallery-gallery {
 
 /* FlexSlider Necessary Styles
 *********************************/
-.wegal-flexslider {margin: 0; padding: 0;}
+.wegal-flexslider {margin: 0; padding: 0; width: 100%;}
 .wegal-flexslider .slides > li {display: none; -webkit-backface-visibility: hidden; position: relative; margin: 0 !important;} /* Hide the slides before the JS is loaded. Avoids image jumping */
 .wegal-flexslider .slides img {width: 100%; display: block;}
 .flex-pauseplay span {text-transform: capitalize;}
