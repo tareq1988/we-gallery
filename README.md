@@ -7,8 +7,8 @@ If you are looking for a simple, easy to use and lightweight gallery plugin, **W
 
 ###Features
 * Lightweight and intuitive UI
-* Display media grid
-* Flexslider included for slider display
+* Display as media grid
+* Display as slider &rarr; Flexslider
 * Bulk image uploader and WordPress 3.8 UI compatible
 * Developer friendly
 
@@ -27,11 +27,17 @@ Simply insert the shortcode below into the post/page.
 **In your theme:**
 To insert a gallery in your theme, add the following code to the appropriate theme file.
 
-`<?php if ( function_exists( 'wegal_show_gallery' ) ) { wegal_show_gallery( 1 ); } ?>`
+```php
+<?php
+if ( function_exists( 'wegal_show_gallery' ) ) {
+    wegal_show_gallery( 1, $args = array() );
+}
+?>
+```
 
 ## Changelog
 
-= 0.1 =
+** 0.1**
 * Initial release.
 
 ### Contribute
