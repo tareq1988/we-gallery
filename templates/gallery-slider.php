@@ -9,7 +9,7 @@
 
 <div class="wegal-gallery-wrap gallery-slider">
     <div class="wegal-flexslider" id="wegallery-slier-<?php echo $id; ?>">
-        <ul class="wegallery-gallery slides">
+        <ul class="slides">
 
             <?php foreach ($gallery_images as $image) {
 
