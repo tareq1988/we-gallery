@@ -6,6 +6,7 @@ Requires at least: 3.8
 Tested up to: 3.9.1
 Stable tag: trunk
 Donate Link: http://tareq.wedevs.com/donate/
+License: GPLv2
 
 The missing gallery of WordPress. Simple, yet the effective gallery plugin!
 
@@ -57,6 +58,10 @@ Nothing here yet!
 6. Grid Display
 7. Slider Display
 8. Image popup
+
+== Upgrade Notice ==
+
+Nothing here
 
 == Changelog ==
 
