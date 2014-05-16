@@ -1,4 +1,4 @@
-=== We Gallery  ===
+=== weGallery  ===
 Homepage: http://wedevs.com/plugin/we-gallery
 Contributors: tareq1988
 Tags: gallery, galleries, image, images, media, photo, album, photo albums, photos, picture, pictures, thumbnails
