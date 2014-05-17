@@ -40,5 +40,10 @@
         <textarea id="wegal-input-description" cols="30" rows="3"><%= image.description %></textarea>
     </div>
 
+    <div class="wegal-input-box">
+        <label for="wegal-input-tags"><?php _e( 'Tags', 'wegal' ); ?></label>
+        <input type="text" value="<%= image.tags %>" id="wegal-input-tags">
+    </div>
+
     <input type="hidden" id="wegal-input-att-id" value="<%= image.id %>">
 </script>

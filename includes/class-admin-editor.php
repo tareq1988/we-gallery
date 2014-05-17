@@ -17,10 +17,11 @@ class We_Gallery_Admin_Editor {
         add_action( 'admin_footer', array( $this, 'media_thickbox_content' ) );
 
         // custom columns
-        add_filter( 'manage_edit-we_gallery_columns', array( $this, 'admin_column' ) );
+        add_filter( 'manage_edit-we_gallery_columns', array( $this, 'admin_column' ),10.2 );
         add_action( 'manage_we_gallery_posts_custom_column', array( $this, 'admin_column_value' ), 10, 2 );
 
         add_filter( 'post_updated_messages', array($this, 'gallery_updated_message') );
+        add_filter( 'wp_prepare_attachment_for_js', array($this, 'attachment_enhancements'),10,2 );
 
         add_action( 'wp_ajax_wegal_save_image_details', array($this, 'update_image' ) );
     }
@@ -47,7 +48,7 @@ class We_Gallery_Admin_Editor {
         // scripts
         wp_enqueue_media();
         wp_enqueue_script( 'thickbox' );
-        wp_enqueue_script( 'wegal-admin', WEGAL_ASSET_URI . '/js/admin.js', array('jquery', 'underscore') );
+        wp_enqueue_script( 'wegal-admin', WEGAL_ASSET_URI . '/js/admin.js', array('jquery', 'underscore'),"1" );
 
         // styles
         wp_enqueue_style( 'thickbox' );
@@ -125,6 +126,7 @@ class We_Gallery_Admin_Editor {
             'cb' => '<input type="checkbox" />',
             'title' => __( 'Gallery Name', 'wegal' ),
             'num_image' => __( 'Images', 'wegal' ),
+            'shortcode' => __( 'Shortcode', 'wegal' ),
             'date' => __( 'Date', 'wegal' ),
         );
 
@@ -150,8 +152,12 @@ class We_Gallery_Admin_Editor {
                 } else {
                     echo __( 'No images', 'wegal' );
                 }
-
                 break;
+
+            case "shortcode":
+                echo "[wegallery id={$post_id}]";
+                break;
+
         }
     }
 
@@ -342,12 +348,29 @@ class We_Gallery_Admin_Editor {
         $post['post_content'] = $_POST['description'];
 
         $alt = wp_unslash( $_POST['alt'] );
+        $tags = wp_unslash( $_POST['tags'] );
+
         if ( $alt != get_post_meta( $id, '_wp_attachment_image_alt', true ) ) {
             $alt = wp_strip_all_tags( $alt, true );
             update_post_meta( $id, '_wp_attachment_image_alt', wp_slash( $alt ) );
         }
 
+        if ( $tags != get_post_meta( $id, '_wp_attachment_image_tags', true ) ) {
+            $tags = wp_strip_all_tags( $tags, true );
+            update_post_meta( $id, '_wp_attachment_image_tags', wp_slash( $tags ) );
+        }
+
         wp_update_post( $post );
         wp_send_json_success();
     }
+
+    function attachment_enhancements($response, $attachment){
+        $id = $response['id'];
+        if("attachment"==$attachment->post_type){
+            $response['tags']=get_post_meta( $id, '_wp_attachment_image_tags', true );
+        }
+        return $response;
+    }
+
+
 }

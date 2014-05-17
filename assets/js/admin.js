@@ -140,12 +140,13 @@
                 attachment_id = self.data('attachment_id'),
                 model = new wp.media.model.Attachment({ id: attachment_id });
 
+
+
             $('#wegal-popup-overlay').show();
             $('#wegal-popup-box').show();
 
             model.fetch({
                 success: function(model, resp) {
-
                     var tpl = _.template( $('#wegal-tmpl-image-editor').html(), {image: resp} );
                     $('#wegal-ajax-content').html(tpl);
                 },
@@ -170,6 +171,7 @@
                 title: $('#wegal-input-title').val(),
                 caption: $('#wegal-input-caption').val(),
                 alt: $('#wegal-input-alt').val(),
+                tags: $('#wegal-input-tags').val(),
                 description: $('#wegal-input-description').val(),
                 _wpnonce: wegalAdmin.nonce,
                 action: 'wegal_save_image_details'
