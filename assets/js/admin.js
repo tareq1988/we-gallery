@@ -147,17 +147,8 @@
 
             model.fetch({
                 success: function(model, resp) {
-                    var params = {
-                        action:"wegal_get_tags",
-                        id: attachment_id
-                    };
-                    $.getJSON(wegalAdmin.ajaxurl,params,function(data){
-                        resp.tags = data.tags;
-                        var tpl = _.template( $('#wegal-tmpl-image-editor').html(), {image: resp} );
-                        $('#wegal-ajax-content').html(tpl);
-                    });
-
-
+                    var tpl = _.template( $('#wegal-tmpl-image-editor').html(), {image: resp} );
+                    $('#wegal-ajax-content').html(tpl);
                 },
 
                 error: function(model, resp) {

@@ -21,9 +21,9 @@ class We_Gallery_Admin_Editor {
         add_action( 'manage_we_gallery_posts_custom_column', array( $this, 'admin_column_value' ), 10, 2 );
 
         add_filter( 'post_updated_messages', array($this, 'gallery_updated_message') );
+        add_filter( 'wp_prepare_attachment_for_js', array($this, 'attachment_enhancements'),10,2 );
 
         add_action( 'wp_ajax_wegal_save_image_details', array($this, 'update_image' ) );
-        add_action( 'wp_ajax_wegal_get_tags', array($this, 'get_tags' ) );
     }
 
     /**
@@ -365,12 +365,17 @@ class We_Gallery_Admin_Editor {
     }
 
 
-    function get_tags(){
-        $post_id = $_REQUEST['id'];
-        $tags = get_post_meta( $post_id, '_wp_attachment_image_tags', true );
-        echo json_encode(array("tags"=>$tags));
-        die();
+    function get_tags($id){
+        $tags = get_post_meta( $id, '_wp_attachment_image_tags', true );
+        return $tags;
+    }
 
+    function attachment_enhancements($response, $attachment){
+        $id = $response['id'];
+        if("attachment"==$attachment->post_type){
+            $response['tags']=get_post_meta( $id, '_wp_attachment_image_tags', true );
+        }
+        return $response;
     }
 
 
