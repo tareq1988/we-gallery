@@ -341,7 +341,6 @@ class We_Gallery_Admin_Editor {
         $post['post_title']   = $_POST['title'];
         $post['post_excerpt'] = $_POST['caption'];
         $post['post_content'] = $_POST['description'];
-        $post['tags'] = $_POST['tags'];
 
         $alt = wp_unslash( $_POST['alt'] );
         $tags = wp_unslash( $_POST['tags'] );
