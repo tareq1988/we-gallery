@@ -126,6 +126,7 @@ class We_Gallery_Admin_Editor {
             'cb' => '<input type="checkbox" />',
             'title' => __( 'Gallery Name', 'wegal' ),
             'num_image' => __( 'Images', 'wegal' ),
+            'shortcode' => __( 'Shortcode', 'wegal' ),
             'date' => __( 'Date', 'wegal' ),
         );
 
@@ -151,8 +152,12 @@ class We_Gallery_Admin_Editor {
                 } else {
                     echo __( 'No images', 'wegal' );
                 }
-
                 break;
+
+            case "shortcode":
+                echo "[wegallery id={$post_id}]";
+                break;
+
         }
     }
 
