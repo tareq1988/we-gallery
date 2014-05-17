@@ -364,12 +364,6 @@ class We_Gallery_Admin_Editor {
         wp_send_json_success();
     }
 
-
-    function get_tags($id){
-        $tags = get_post_meta( $id, '_wp_attachment_image_tags', true );
-        return $tags;
-    }
-
     function attachment_enhancements($response, $attachment){
         $id = $response['id'];
         if("attachment"==$attachment->post_type){
