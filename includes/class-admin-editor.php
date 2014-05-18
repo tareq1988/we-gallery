@@ -17,11 +17,11 @@ class We_Gallery_Admin_Editor {
         add_action( 'admin_footer', array( $this, 'media_thickbox_content' ) );
 
         // custom columns
-        add_filter( 'manage_edit-we_gallery_columns', array( $this, 'admin_column' ),10.2 );
+        add_filter( 'manage_edit-we_gallery_columns', array( $this, 'admin_column' ), 10, 2 );
         add_action( 'manage_we_gallery_posts_custom_column', array( $this, 'admin_column_value' ), 10, 2 );
 
         add_filter( 'post_updated_messages', array($this, 'gallery_updated_message') );
-        add_filter( 'wp_prepare_attachment_for_js', array($this, 'attachment_enhancements'),10,2 );
+        add_filter( 'wp_prepare_attachment_for_js', array($this, 'attachment_enhancements'), 10, 2 );
 
         add_action( 'wp_ajax_wegal_save_image_details', array($this, 'update_image' ) );
     }
@@ -154,8 +154,8 @@ class We_Gallery_Admin_Editor {
                 }
                 break;
 
-            case "shortcode":
-                echo "[wegallery id={$post_id}]";
+            case 'shortcode':
+                echo '[wegallery id="' . $post_id . ']"';
                 break;
 
         }
@@ -347,7 +347,7 @@ class We_Gallery_Admin_Editor {
         $post['post_excerpt'] = $_POST['caption'];
         $post['post_content'] = $_POST['description'];
 
-        $alt = wp_unslash( $_POST['alt'] );
+        $alt  = wp_unslash( $_POST['alt'] );
         $tags = wp_unslash( $_POST['tags'] );
 
         if ( $alt != get_post_meta( $id, '_wp_attachment_image_alt', true ) ) {
@@ -364,11 +364,20 @@ class We_Gallery_Admin_Editor {
         wp_send_json_success();
     }
 
+    /**
+     * Adds tags on the ajax request for WordPress attachment
+     *
+     * @param  array $response
+     * @param  WP_Post $attachment
+     * @return array
+     */
     function attachment_enhancements($response, $attachment){
         $id = $response['id'];
-        if("attachment"==$attachment->post_type){
-            $response['tags']=get_post_meta( $id, '_wp_attachment_image_tags', true );
+
+        if ( 'attachment' == $attachment->post_type ) {
+            $response['tags'] = get_post_meta( $id, '_wp_attachment_image_tags', true );
         }
+
         return $response;
     }
 
