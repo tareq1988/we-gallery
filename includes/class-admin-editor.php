@@ -155,7 +155,7 @@ class We_Gallery_Admin_Editor {
                 break;
 
             case 'shortcode':
-                echo '[wegallery id="' . $post_id . ']"';
+                echo '[wegallery id="' . $post_id . '"]';
                 break;
 
         }
