@@ -3,9 +3,9 @@ Homepage: http://wedevs.com/plugin/we-gallery
 Contributors: tareq1988
 Tags: gallery, galleries, image, images, media, photo, album, photo albums, photos, picture, pictures, thumbnails
 Requires at least: 3.8
-Tested up to: 3.9.1
+Tested up to: 4.6.1
 Stable tag: trunk
-Donate Link: http://tareq.wedevs.com/donate/
+Donate Link: https://tareq.co/donate/
 License: GPLv2
 
 The missing gallery of WordPress. Simple, yet the effective gallery plugin!
@@ -27,7 +27,7 @@ We Gallery is a modern image gallery for WordPress that leverages WordPress aest
 For feature improvements, please fork the [Github](https://github.com/tareq1988/we-gallery) repository. Contributions are always welcome :-)
 
 = Author =
-[Tareq Hasan](http://tareq.wedevs.com) from [weDevs](http://wedevs.com)
+[Tareq Hasan](https://tareq.co) from [weDevs](http://wedevs.com)
 
 == Installation ==
 
@@ -65,5 +65,10 @@ Nothing here
 
 == Changelog ==
 
+= 1.0 (24 October, 2016) =
+
+ * Fixed the compatibility with underscore template
+
 = 0.1 =
-* Initial release.
+
+ * Initial release.
