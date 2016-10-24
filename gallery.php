@@ -3,7 +3,7 @@
  * Plugin Name: We Gallery
  * Plugin URI: https://wedevs.com/
  * Description: The missing gallery of WordPress. Simple, yet the effective gallery plugin!
- * Version: 1.0
+ * Version: 1.1
  * Author: Tareq Hasan
  * Author URI: https://tareq.co/
  * License: GPL2
