@@ -65,6 +65,10 @@ Nothing here
 
 == Changelog ==
 
+= 1.1 (24 October, 2016) =
+
+ * Fixed the compatibility with underscore template in image details editor
+
 = 1.0 (24 October, 2016) =
 
  * Fixed the compatibility with underscore template

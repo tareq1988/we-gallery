@@ -147,7 +147,7 @@
 
             model.fetch({
                 success: function(model, resp) {
-                    var tpl = _.template( $('#wegal-tmpl-image-editor').html(), {image: resp} );
+                    var tpl = _.template( $('#wegal-tmpl-image-editor').html() )( {image: resp} );
                     $('#wegal-ajax-content').html(tpl);
                 },
 
