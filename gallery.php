@@ -1,17 +1,17 @@
 <?php
 /**
  * Plugin Name: We Gallery
- * Plugin URI: http://wedevs.com/
+ * Plugin URI: https://wedevs.com/
  * Description: The missing gallery of WordPress. Simple, yet the effective gallery plugin!
- * Version: 0.1
+ * Version: 1.0
  * Author: Tareq Hasan
- * Author URI: http://tareq.wedevs.com/
+ * Author URI: https://tareq.co/
  * License: GPL2
  * TextDomain: wegal
  */
 
 /**
- * Copyright (c) 2014 Tareq Hasan (email: tareq@wedevs.com). All rights reserved.
+ * Copyright (c) 2016 Tareq Hasan (email: tareq@wedevs.com). All rights reserved.
  *
  * Released under the GPL license
  * http://www.opensource.org/licenses/gpl-license.php
