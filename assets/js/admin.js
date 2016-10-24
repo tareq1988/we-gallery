@@ -68,7 +68,7 @@
                         url = image.url;
                     }
 
-                    images += _.template(template, {
+                    images += _.template(template)({
                         url: url,
                         id: image.id
                     });
